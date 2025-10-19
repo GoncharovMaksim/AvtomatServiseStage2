@@ -47,7 +47,7 @@
 
 ```bash
 git clone https://github.com/GoncharovMaksim/AvtomatServiseStage2.git
-cd AvtomatServise
+cd AvtomatServiseStage2
 ```
 
 2. **Установите все зависимости:**
