@@ -126,21 +126,19 @@ class Product {
       this.db.run(
         query,
         [title, price, description, category, image, rating.rate, rating.count],
-        function (err) {
+        async function (err) {
           if (err) {
             reject(err);
           } else {
-            resolve({
-              id: this.lastID,
-              title,
-              price,
-              description,
-              category,
-              image,
-              rating,
-            });
+            // Получаем созданный товар из базы данных
+            try {
+              const newProduct = await this.getById(this.lastID);
+              resolve(newProduct);
+            } catch (getError) {
+              reject(getError);
+            }
           }
-        }
+        }.bind(this)
       );
     });
   }
@@ -186,13 +184,19 @@ class Product {
     const query = `UPDATE products SET ${updateFields.join(", ")} WHERE id = ?`;
 
     return new Promise((resolve, reject) => {
-      this.db.run(query, values, function (err) {
+      this.db.run(query, values, async (err) => {
         if (err) {
           reject(err);
         } else if (this.changes === 0) {
           resolve(null);
         } else {
-          resolve({ id, ...productData });
+          // Получаем обновленный товар из базы данных
+          try {
+            const updatedProduct = await this.getById(id);
+            resolve(updatedProduct);
+          } catch (getError) {
+            reject(getError);
+          }
         }
       });
     });

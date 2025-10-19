@@ -38,8 +38,11 @@ export const productService = {
   // Создать новый товар
   async createProduct(data: CreateProductData): Promise<Product> {
     try {
-      const response = await api.post<Product>("/products", data);
-      return response.data;
+      const response = await api.post<{ message: string; product: Product }>(
+        "/products",
+        data
+      );
+      return response.data.product;
     } catch (error) {
       console.error("Ошибка при создании товара:", error);
       throw new Error("Не удалось создать товар");
@@ -52,8 +55,11 @@ export const productService = {
     data: Partial<CreateProductData>
   ): Promise<Product> {
     try {
-      const response = await api.put<Product>(`/products/${id}`, data);
-      return response.data;
+      const response = await api.put<{ message: string; product: Product }>(
+        `/products/${id}`,
+        data
+      );
+      return response.data.product;
     } catch (error) {
       console.error(`Ошибка при обновлении товара ${id}:`, error);
       throw new Error("Не удалось обновить товар");
